@@ -1,76 +1,79 @@
 import streamlit as st
 
-# -----------------------------
-# Page Configuration
-# -----------------------------
+from components.sidebar import render_sidebar
+
+from services.excel_loader import (
+    get_frameworks_for_report
+)
+
+from services.prompt_builder import (
+    build_report_prompt
+)
+
+from services.gemini_service import (
+    generate_framework
+)
+
 st.set_page_config(
-    page_title="AI Company Report Generator",
+    page_title="AI Company Intelligence",
     page_icon="📊",
     layout="wide"
 )
 
-# -----------------------------
-# Title
-# -----------------------------
-st.title("📊 AI Company Report Generator")
-st.write("Generate professional company reports using AI.")
+company, persona, report, generate = render_sidebar()
 
-st.divider()
+st.title("📊 AI Company Intelligence Platform")
 
-# -----------------------------
-# Input Section
-# -----------------------------
-
-col1, col2 = st.columns(2)
-
-with col1:
-    company = st.text_input(
-        "Company Name",
-        placeholder="Example: PalTech"
-    )
-
-with col2:
-    persona = st.selectbox(
-        "Select Persona",
-        [
-            "Leadership",
-            "Sales",
-            "Marketing",
-            "HR",
-            "Leads/Manager"
-        ]
-    )
-
-report_type = st.radio(
-    "Report Type",
-    [
-        "Executive Summary",
-        "Detailed Report"
-    ],
-    horizontal=True
+st.write(
+    "Generate AI-powered executive company reports using consulting frameworks."
 )
 
 st.divider()
 
-# -----------------------------
-# Generate Button
-# -----------------------------
+if generate:
 
-if st.button(
-    "🚀 Generate Report",
-    use_container_width=True
-):
+    framework_ids = get_frameworks_for_report(
+        persona,
+        report
+    )
 
-    if company == "":
-        st.warning("Please enter a company name.")
-    else:
+    # Build the master prompt
+    master_prompt = build_report_prompt(
+        company,
+        framework_ids
+    )
 
-        st.success("Inputs captured successfully!")
+    # Generate report (spinner disappears automatically when complete)
+    with st.spinner(
+        f"Generating report with {len(framework_ids)} frameworks..."
+    ):
+        response = generate_framework(master_prompt)
 
-        st.write("### Selected Inputs")
+    st.success("✅ Executive Report generated successfully")
 
-        st.write(f"**Company:** {company}")
-        st.write(f"**Persona:** {persona}")
-        st.write(f"**Report Type:** {report_type}")
+    from services.html_renderer import render_report
+    from services.report_exporter import save_html
 
-        st.info("Gemini integration coming next...")
+    complete_html = render_report(response)
+
+    st.markdown(
+        complete_html,
+        unsafe_allow_html=True
+    )
+
+    save_html(
+        f"{company}.html",
+        complete_html
+    )
+    
+    st.download_button(
+
+        label="📄 Download HTML Report",
+
+        data=complete_html,
+
+        file_name=f"{company}_Executive_Report.html",
+
+        mime="text/html"
+
+    )

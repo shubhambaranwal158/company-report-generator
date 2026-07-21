@@ -1,0 +1,328 @@
+/* ===========================================
+   GLOBAL
+=========================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+    padding:40px;
+
+    background:#EEF2F7;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+    color:#2C3E50;
+
+    line-height:1.6;
+
+}
+
+/* ===========================================
+   PAGE
+=========================================== */
+
+.page{
+
+    max-width:1400px;
+
+    margin:auto;
+
+    background:white;
+
+    padding:45px;
+
+    border-radius:14px;
+
+    box-shadow:0 5px 25px rgba(0,0,0,.08);
+
+}
+
+/* ===========================================
+   HEADER
+=========================================== */
+
+header{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+}
+
+header h1{
+
+    margin-bottom:5px;
+
+    color:#12355B;
+
+    font-size:34px;
+
+}
+
+.subtitle{
+
+    color:#777;
+
+    font-size:16px;
+
+}
+
+/* ===========================================
+   REPORT META
+=========================================== */
+
+.generated{
+
+    color:#666;
+
+    font-size:14px;
+
+    margin-top:8px;
+
+    margin-bottom:4px;
+
+}
+
+.generated-date{
+
+    color:#777;
+
+    font-size:13px;
+
+    margin-top:0;
+
+    margin-bottom:25px;
+
+}
+
+/* ===========================================
+   GENERIC SECTION
+=========================================== */
+
+section{
+
+    margin-top:35px;
+
+    margin-bottom:35px;
+
+}
+
+/* ===========================================
+   FRAMEWORK CARD
+=========================================== */
+
+.framework-card{
+
+    background:white;
+
+    border-left:6px solid #12355B;
+
+    padding:30px;
+
+    border-radius:10px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.05);
+
+}
+
+/* ===========================================
+   SUMMARY
+=========================================== */
+
+.summary-box{
+
+    background:#F5FAFF;
+
+    border-left:8px solid #0077B6;
+
+    padding:25px;
+
+    border-radius:10px;
+
+}
+
+/* ===========================================
+   RECOMMENDATIONS
+=========================================== */
+
+.recommendation-box{
+
+    background:#F8FFF6;
+
+    border-left:8px solid #2E7D32;
+
+    padding:25px;
+
+    border-radius:10px;
+
+}
+
+/* ===========================================
+   DASHBOARD
+=========================================== */
+
+.dashboard{
+
+    margin-top:20px;
+
+}
+
+.dashboard-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+.dashboard-table th{
+
+    background:#12355B;
+
+    color:white;
+
+    padding:14px;
+
+    text-align:left;
+
+}
+
+.dashboard-table td{
+
+    padding:14px;
+
+    border:1px solid #DDD;
+
+}
+
+/* ===========================================
+   HEADINGS
+=========================================== */
+
+h1{
+
+    color:#12355B;
+
+    margin-top:0;
+
+    border-bottom:3px solid #12355B;
+
+    padding-bottom:8px;
+
+}
+
+h2{
+
+    color:#1B4965;
+
+}
+
+h3{
+
+    color:#5FA8D3;
+
+}
+
+/* ===========================================
+   TABLES
+=========================================== */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:18px;
+
+    margin-bottom:20px;
+
+}
+
+table th{
+
+    background:#12355B;
+
+    color:white;
+
+    padding:12px;
+
+}
+
+table td{
+
+    border:1px solid #DDD;
+
+    padding:10px;
+
+}
+
+tr:nth-child(even){
+
+    background:#F8F8F8;
+
+}
+
+/* ===========================================
+   LISTS
+=========================================== */
+
+ul{
+
+    padding-left:25px;
+
+}
+
+li{
+
+    margin-bottom:8px;
+
+}
+
+/* ===========================================
+   PARAGRAPHS
+=========================================== */
+
+p{
+
+    margin-top:10px;
+
+}
+
+/* ===========================================
+   HORIZONTAL LINE
+=========================================== */
+
+hr{
+
+    border:none;
+
+    border-top:2px solid #E5E5E5;
+
+    margin-top:35px;
+
+    margin-bottom:35px;
+
+}
+
+/* ===========================================
+   FOOTER
+=========================================== */
+
+footer{
+
+    margin-top:60px;
+
+    text-align:center;
+
+    color:#888;
+
+    font-size:13px;
+
+}
