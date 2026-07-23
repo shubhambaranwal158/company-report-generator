@@ -1,18 +1,16 @@
+import re
+
 import streamlit as st
+import streamlit.components.v1 as components
 
 from components.sidebar import render_sidebar
 
-from services.excel_loader import (
-    get_frameworks_for_report
-)
+from services.prompt_builder import build_report_prompt
+from services.gemini_service import generate_framework
+from services.html_renderer import render_report
+from services.report_exporter import save_html
+# from services.pdf_exporter import save_pdf
 
-from services.prompt_builder import (
-    build_report_prompt
-)
-
-from services.gemini_service import (
-    generate_framework
-)
 
 st.set_page_config(
     page_title="AI Company Intelligence",
@@ -20,8 +18,34 @@ st.set_page_config(
     layout="wide"
 )
 
-company, persona, report, generate = render_sidebar()
 
+# -----------------------------
+# Sidebar
+# -----------------------------
+company, company_website, persona, report, framework_ids, generate = render_sidebar()
+
+current_inputs = (
+    company,
+    company_website,
+    persona,
+    report,
+    tuple(sorted(framework_ids))
+)
+
+
+# -----------------------------
+# Session State
+# -----------------------------
+if "generated_report" not in st.session_state:
+    st.session_state.generated_report = None
+    st.session_state.generated_filename = None
+    #st.session_state.generated_pdf = None
+    st.session_state.last_generated_inputs = None
+
+
+# -----------------------------
+# Page Header
+# -----------------------------
 st.title("📊 AI Company Intelligence Platform")
 
 st.write(
@@ -30,50 +54,113 @@ st.write(
 
 st.divider()
 
+
+# -----------------------------
+# Safe filenames
+# -----------------------------
+safe_company = re.sub(
+    r"[^A-Za-z0-9]+",
+    "_",
+    company
+).strip("_")
+
+safe_report = re.sub(
+    r"[^A-Za-z0-9]+",
+    "_",
+    report
+).strip("_")
+
+filename = f"{safe_company}_{safe_report}.html"
+
+
+# -----------------------------
+# Generate Report
+# -----------------------------
 if generate:
 
-    framework_ids = get_frameworks_for_report(
-        persona,
-        report
-    )
-
-    # Build the master prompt
     master_prompt = build_report_prompt(
         company,
+        company_website,
+        report,
         framework_ids
     )
 
-    # Generate report (spinner disappears automatically when complete)
     with st.spinner(
         f"Generating report with {len(framework_ids)} frameworks..."
     ):
+
         response = generate_framework(master_prompt)
 
-    st.success("✅ Executive Report generated successfully")
-
-    from services.html_renderer import render_report
-    from services.report_exporter import save_html
-
-    complete_html = render_report(response)
-
-    st.markdown(
-        complete_html,
-        unsafe_allow_html=True
+    complete_html = render_report(
+        response,
+        company,
+        report
     )
 
     save_html(
-        f"{company}.html",
-        complete_html
+       filename,
+      complete_html
     )
-    
+
+    #pdf_path = save_pdf(
+    #    filename,
+    #    complete_html
+    #)
+
+    st.session_state.generated_report = complete_html
+    st.session_state.generated_filename = filename
+    #st.session_state.generated_pdf = pdf_path
+    st.session_state.last_generated_inputs = current_inputs
+
+    st.success(
+        "✅ Executive Report generated successfully"
+    )
+
+
+# -----------------------------
+# Input Change Warning
+# -----------------------------
+if (
+    st.session_state.generated_report
+    and
+    current_inputs != st.session_state.last_generated_inputs
+):
+
+    st.warning(
+        "⚠️ Report parameters have changed. "
+        "The displayed report reflects the previous selections. "
+        "Click **Generate Report** to refresh."
+    )
+
+
+# -----------------------------
+# Display Report
+# -----------------------------
+if st.session_state.generated_report:
+
+    components.html(
+        st.session_state.generated_report,
+        height=1500,
+        scrolling=True
+    )
     st.download_button(
-
         label="📄 Download HTML Report",
-
-        data=complete_html,
-
-        file_name=f"{company}_Executive_Report.html",
-
-        mime="text/html"
-
+        data=st.session_state.generated_report,
+        file_name=st.session_state.generated_filename,
+        mime="text/html",
+        use_container_width=True
     )
+
+    #with col2:
+    #    if st.session_state.generated_pdf:
+    #        with open(
+    #            st.session_state.generated_pdf,
+    #            "rb"
+    #        ) as pdf_file:
+    #            st.download_button(
+    #                label="📑 Download PDF Report",
+    #                data=pdf_file,
+    #                file_name=st.session_state.generated_pdf.name,
+    #                mime="application/pdf",
+    #                use_container_width=True
+    #            )

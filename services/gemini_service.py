@@ -20,13 +20,13 @@ def generate_framework(prompt: str) -> str:
 
         print("=" * 80)
         print("Calling Gemini...")
-        print("Model: gemini-3.5-flash")
+        print("Model: gemini-3.6-flash")
         print()
         print(prompt[:500])      # first 500 characters
         print("=" * 80)
 
         response = client.models.generate_content(
-            model="gemini-3.5-flash",
+            model="gemini-3.6-flash",
             contents=prompt
         )
 

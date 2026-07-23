@@ -1,5 +1,17 @@
-venv/
+# Python
 __pycache__/
-.env
 *.pyc
-*.code-workspace
+venv/
+
+# Environment
+.env
+
+# Generated reports
+generated_reports/
+
+# Temporary Excel files
+~$*.xlsx
+
+# IDE
+.vscode/
+.idea/

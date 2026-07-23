@@ -99,7 +99,36 @@ def get_framework_names(persona: str, report: str) -> list:
             )
 
     return framework_names
+def get_frameworks(persona: str, report: str) -> list[dict]:
+    """
+    Returns framework ID and Framework Name.
+    """
 
+    framework_ids = get_frameworks_for_report(
+        persona,
+        report
+    )
+
+    framework_df = load_framework_library()
+
+    frameworks = []
+
+    for framework_id in framework_ids:
+
+        framework = framework_df[
+            framework_df["#"].astype(str).str.strip() == framework_id
+        ]
+
+        if not framework.empty:
+
+            frameworks.append(
+                {
+                    "id": framework_id,
+                    "name": framework.iloc[0]["Framework Name"]
+                }
+            )
+
+    return frameworks
 
 if __name__ == "__main__":
 
