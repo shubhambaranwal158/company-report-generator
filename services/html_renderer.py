@@ -6,7 +6,7 @@ TEMPLATE_PATH = Path("templates/report_template.html")
 CSS_PATH = Path("assets/css/report.css")
 
 
-def render_report(report_html: str) -> str:
+def render_report(report_html: str, company: str, report_title: str) -> str:
     """
     Renders the final HTML report by injecting:
     - CSS
@@ -36,6 +36,16 @@ def render_report(report_html: str) -> str:
     html = html.replace(
         "{{REPORT}}",
         report_html
+    )
+    # Inject report title
+    html = html.replace(
+        "{{REPORT_TITLE}}",
+        report_title
+    )
+    # Inject company name
+    html = html.replace(
+        "{{COMPANY_NAME}}",
+        company
     )
 
     return html
