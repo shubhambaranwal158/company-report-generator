@@ -1,7 +1,9 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 venv/
+.venv/
 
 # Environment
 .env
@@ -15,3 +17,11 @@ generated_reports/
 # IDE
 .vscode/
 .idea/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/secrets.toml
