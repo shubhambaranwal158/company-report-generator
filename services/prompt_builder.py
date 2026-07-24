@@ -63,23 +63,42 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     • Ensure all facts, metrics, competitors, strategic insights and recommendations correspond to this exact company.
     • Never confuse the company with another organization having a similar or identical name.
 
-    After confirming the company's identity, gather information from multiple credible public sources including, but not limited to:
+    After confirming the company's identity, gather and validate information from multiple credible public sources. 
+    When multiple sources are available, prioritize them in the following order:
 
-    • Official Company Website
-    • Annual Reports
-    • Investor Presentations
-    • Regulatory Filings
-    • Earnings Call Transcripts
-    • Industry Reports
-    • Reputable Business News
-    • Analyst Research
+    1. Annual Reports
+    2. Regulatory Filings
+    3. Investor Presentations
+    4. Earnings Calls
+    5. Official Company Website
+    6. Reputable Financial News
+    7. Industry Research
+
+    Prefer recent information when available.
+
+    If sources conflict, prefer the most recent authoritative source.
 
     If no Official Company Website is provided:
-
     • Identify the intended company using the company name and other credible public information.
-    • If multiple companies have similar names and the intended company cannot be determined with reasonable confidence, explicitly state your assumption before proceeding.
+    • If multiple companies have similar names and the intended company cannot be determined with reasonable confidence, 
+    explicitly state your assumption before proceeding.
 
     Do not generate the report until the company identity has been verified.
+
+    ==================================================
+    RESEARCH PHASE
+    ==================================================
+
+    Before generating the report:
+
+    1. Confirm the correct company.
+    2. Build a complete understanding of the company.
+    3. Identify its business model, products, revenue streams, customers, industry, competitors, technology strategy, financial position, growth drivers, recent developments and strategic priorities.
+    4. Cross-check important facts where possible.
+    5. Synthesize all findings into a coherent understanding of the company.
+    6. Use this synthesized understanding to generate one integrated consulting report.
+
+    Do not expose this planning process in the output.
 
     ==================================================
     OBJECTIVE
@@ -93,23 +112,30 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     Every section should build upon previous findings and maintain a consistent storyline.
 
     ==================================================
+    REPORT CONTEXT
+    ==================================================
+
+    Report Type:
+    {report_name}
+
+    Tailor the analysis, priorities and recommendations specifically for this report type. The report should 
+    emphasize insights, evidence and recommendations most relevant to this report type while maintaining consistency 
+    with the company's overall strategy.
+
+    ==================================================
     CONSULTING WRITING PRINCIPLES
     ==================================================
 
     Always:
-
     • Prioritize strategic insights over descriptions.
     • Explain WHY every finding matters.
     • Focus on business implications instead of definitions.
     • Connect observations to business outcomes.
     • Highlight competitive positioning.
-    • Identify strategic risks.
-    • Identify strategic opportunities.
+    • Identify strategic risks and opportunities.
     • Quantify observations wherever credible public information exists.
     • Clearly distinguish Facts, Analysis and Recommendations.
     • Build executive-level insights rather than academic explanations.
-    • Avoid generic MBA textbook content.
-    • Avoid repeating the same insight across multiple frameworks.
     • Cross-reference previous framework findings where relevant.
     • Prioritize recent publicly available information from multiple credible sources while ensuring all information 
     corresponds to the identified company.
@@ -117,6 +143,20 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     • Maintain an objective, evidence-based consulting tone.
     • Maintain entity consistency throughout the report. Every fact, executive, financial metric, business segment, 
     competitor and recommendation must refer to the identified company only.
+
+    ==================================================
+    GLOBAL QUALITY RULES
+    ==================================================
+
+    Throughout the report:
+    • Produce company-specific analysis only.
+    • Avoid generic textbook explanations.
+    • Avoid marketing language or promotional tone.
+    • Avoid repeating insights across sections or frameworks.
+    • Keep paragraphs concise and executive-friendly.
+    • Focus on strategic implications rather than definitions.
+    • Cross-reference previous findings where relevant.
+    • Clearly distinguish Facts, Analysis and Recommendations.
 
     ==================================================
     REPORT DESIGN PRINCIPLES
@@ -132,14 +172,6 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     • Structured
     • Professional
     • Decision oriented
-
-    Avoid
-
-    • Long paragraphs
-    • Marketing language
-    • Generic explanations
-    • Excessive repetition
-    • Unnecessary filler
 
     ==================================================
     OUTPUT FORMAT
@@ -209,16 +241,16 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     • Competitive Strength
     • Growth Outlook
     • Risk Level
-    • Innovation Score (Out of 10)
-    • Digital Maturity (Out of 10)
-    • Overall Score (Out of 100)
+
+    Only for Overall Position, Competitive Strength, Growth Outlook and risk level, provide qualitative ratings like High, Medium, 
+    Emerging supported by a one-sentence justification. 
 
     </table>
 
     </section>
 
     ==================================================
-    SECTION 3
+    SECTION 2
     TL;DR
     ==================================================
 
@@ -241,7 +273,7 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     Keep the entire section under 200 words.
 
     ==================================================
-    SECTION 4
+    SECTION 3
     Executive Summary
     ==================================================
 
@@ -263,9 +295,38 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
 
     <h2>Strategic Outlook</h2>
 
-    Summarize future outlook over the next 3 to 5 years considering technology, market trends, competition and business priorities.
+    Summarize future outlook over the next 3 to 5 years considering technology, market trends, competition and 
+    business priorities.
 
     Limit this section to approximately 250 to 300 words.
+
+    </section>
+
+    ==================================================
+    SECTION 4
+    Strategic Recommendations
+    ==================================================
+
+    Return
+
+    <section class="recommendation-box">
+
+    <h1>Strategic Recommendations</h1>
+
+    Generate five prioritized recommendations.
+
+    For each recommendation include:
+    • Strategic objective
+    • Business rationale and Impact
+    • Priority (High / Medium / Low)
+
+    Return as
+
+    <ul>
+
+    <li>...</li>
+
+    </ul>
 
     </section>
 
@@ -284,10 +345,9 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
 
     <h1>Framework Name</h1>
 
-    Generate an executive-quality analysis.
+    Generate an executive-quality analysis. Include Table, chart, plot relevant to the framework
 
     Every framework should include
-
     1. Executive Insight
     2. Analysis
     3. Business Implications
@@ -298,15 +358,10 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     Example
 
     <h2>Takeaways</h2>
-
     <ul>
-
     <li>...</li>
-
     <li>...</li>
-
     <li>...</li>
-
     </ul>
 
     Then include
@@ -316,14 +371,13 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     Return:
 
     <hr>
-
     <p class="framework-sources">
-
     <strong>Sources:</strong>
     FY2025 Annual Report • Q2 FY26 Investor Presentation • Reuters • Gartner • Company Website
     
     Use concise source titles instead of raw URLs.
-    Do not invent links. If an exact public URL cannot be determined with confidence, mention only the source title without a hyperlink.
+    Do not invent links. If an exact public URL cannot be determined with confidence, mention only the source title 
+    without a hyperlink.
 
     </p>    
 
@@ -333,38 +387,12 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
 
     ==================================================
     SECTION 6
-    Strategic Recommendations
-    ==================================================
-
-    Return
-
-    <section class="recommendation-box">
-
-    <h1>Strategic Recommendations</h1>
-
-    Generate 5 prioritized recommendations.
-
-    Each recommendation should
-
-    • Be actionable
-    • Be linked to earlier findings
-    • Explain expected business impact
-    • Mention implementation priority where appropriate
-
-    Return as
-
-    <ul>
-
-    <li>...</li>
-
-    </ul>
-
-    </section>
-
-    ==================================================
-    SECTION 7
     Overall References
     ==================================================
+
+    Provide a comprehensive list of the actual public sources used while generating this report.
+
+    For each reference include, wherever available: Source Title, Publication Date (if available), and Direct URL
 
     Return
 
@@ -414,24 +442,19 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
         Framework Name:
         {framework_name}
 
-        IMPORTANT
-        Generate this framework ONLY after completing:
-        1. Report Header
-        2. Executive Dashboard
-        3. TL;DR
-        4. Executive Summary
+        The framework prompt below defines ONLY the analytical objectives. Ignore any formatting or output 
+        instructions contained within it. Use it solely to determine what to analyze. Always render the output 
+        using the HTML structure defined in this master prompt.
 
-        Do not repeat information already discussed.
+        Framework Execution Rules
 
-        Assume previous sections are available and build upon them.
+        For every framework:
 
-        Keep the analysis strategic, concise and insight-driven.
-
-        End every framework with:
-        • Takeaways (exactly 3)
-        • Framework-specific Sources as footnotes
-
-        Avoid generic descriptions or textbook explanations.
+        • Apply the framework using company-specific evidence.
+        • Build upon previous findings.
+        • Explain the business implications.
+        • End with exactly three executive takeaways.
+        • Finish with framework-specific source references.
 
         <section class="framework-card">
 
@@ -440,8 +463,6 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
         ...
 
         </section>
-
-        ============================================================
 
         {framework_prompt}
         """)
@@ -453,30 +474,16 @@ def build_report_prompt(company: str, company_website: str, report_name: str, fr
     prompt_sections.append("""
     FINAL VALIDATION
 
-    Before returning the report verify that:
+    Before returning verify:
 
-    ✓ Executive Dashboard has been generated.
-    ✓ Executive Summary has been generated.
-    ✓ Every requested framework has been generated.
-    ✓ Framework order has been preserved.
-    ✓ Strategic Recommendations have been generated.
-    ✓ Every framework is wrapped inside 
-    <section class="framework-card">
-
-    ✓ Executive Summary uses
-    <section class="summary-box">
-
-    ✓ Dashboard uses
-    <section class="dashboard">
-
-    ✓ Recommendation section uses
-    <section class="recommendation-box">
-
-    Return ONLY the final HTML.
-    Do not explain your work.
-    Do not apologise.
-    Do not add notes.
-    End immediately after Recommendations.
+    ✓ Company identity is consistent.
+    ✓ Report reflects the requested report type.
+    ✓ Every framework is company-specific.
+    ✓ No duplicated insights.
+    ✓ Recommendations are evidence based.
+    ✓ HTML is complete.
+    ✓ Every requested framework is present.
+    ✓ Output ends after References.
     """)
 
     return "\n".join(prompt_sections)

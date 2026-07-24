@@ -11,7 +11,7 @@ def render_sidebar():
 
     with st.sidebar:
 
-        st.title("🏢 Company Overview")
+        st.title("🏢 Company Details")
 
         st.divider()
 
@@ -19,6 +19,8 @@ def render_sidebar():
             "Company Name",
             placeholder="Enter company name..."
         )
+
+        company = company.strip()
 
         company_website = st.text_input(
             "Official Company Website (Optional)",
@@ -111,13 +113,25 @@ def render_sidebar():
 
         st.divider()
 
+        validation_errors = []
+
+        if not company:
+            validation_errors.append(
+                "Please enter a company name."
+            )
+
+        if not selected_frameworks:
+            validation_errors.append(
+                "Please select at least one framework."
+            )
+
         generate = st.button(
             "🚀 Generate Report",
             use_container_width=True,
-            disabled=len(selected_frameworks) == 0
+            disabled=bool(validation_errors)
         )
-        if len(selected_frameworks) == 0:
-            st.warning("⚠ Please select at least one framework to generate the report.")
+        for error in validation_errors:
+            st.caption(f"⚠ {error}")
 
     return (
         company,

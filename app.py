@@ -46,7 +46,7 @@ if "generated_report" not in st.session_state:
 # -----------------------------
 # Page Header
 # -----------------------------
-st.title("📊 AI Company Intelligence Platform")
+st.title("📊 AI Company Overview Platform")
 
 st.write(
     "Generate AI-powered executive company reports using consulting frameworks."
@@ -89,7 +89,37 @@ if generate:
         f"Generating report with {len(framework_ids)} frameworks..."
     ):
 
-        response = generate_framework(master_prompt)
+        try:
+            response = generate_framework(master_prompt)
+
+        except Exception as e:
+
+            st.error(
+                "❌ Failed to generate the report."
+            )
+
+            st.info(
+                "Please verify your internet connection, Gemini API configuration, or try again later."
+            )
+
+            st.exception(e)   # Remove later for production
+
+            st.stop()
+        if not response or not response.strip():
+
+            st.error(
+                "❌ The AI returned an empty response."
+            )
+
+            st.info(
+                "Please try generating the report again."
+            )
+
+            st.stop()
+
+    st.success(
+        "✅ Executive Report generated successfully"
+    )
 
     complete_html = render_report(
         response,
@@ -111,11 +141,6 @@ if generate:
     st.session_state.generated_filename = filename
     #st.session_state.generated_pdf = pdf_path
     st.session_state.last_generated_inputs = current_inputs
-
-    st.success(
-        "✅ Executive Report generated successfully"
-    )
-
 
 # -----------------------------
 # Input Change Warning

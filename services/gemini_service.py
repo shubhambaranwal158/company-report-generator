@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from google import genai
+from google.genai.types import (GenerateContentConfig, Tool, GoogleSearch)
 
 load_dotenv()
 
@@ -27,14 +28,38 @@ def generate_framework(prompt: str) -> str:
 
         response = client.models.generate_content(
             model="gemini-3.6-flash",
-            contents=prompt
+            contents=prompt,
+            config=GenerateContentConfig(
+                temperature=0.2,
+                top_p=0.9,
+                max_output_tokens=65535,
+                response_mime_type="text/plain",
+#                tools=[
+#                    Tool(
+#                        google_search=GoogleSearch()
+#                    )
+#                ]
+            )
         )
 
         print("\nGemini Response Received\n")
 
+        candidate = response.candidates[0]
+
+        finish_reason = getattr(candidate, "finish_reason", None)
+
+        if finish_reason:
+            print("Finish Reason:", finish_reason)
+
+            if str(finish_reason).endswith("MAX_TOKENS"):
+                print("⚠ WARNING: Response was truncated due to max_output_tokens.")
+
         print("Response Length:", len(response.text))
 
-        print(response)
+        print("=" * 80)
+        print("Response Preview:")
+        print(response.text[:1000])
+        print("=" * 80)
 
         return response.text
 
