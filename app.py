@@ -102,7 +102,7 @@ if generate:
                 "Please verify your internet connection, Gemini API configuration, or try again later."
             )
 
-            st.exception(e)   # Remove later for production
+            st.exception(e)
 
             st.stop()
         if not response or not response.strip():

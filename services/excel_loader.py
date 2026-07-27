@@ -75,30 +75,6 @@ def get_framework_details(framework_id: str) -> dict | None:
 
     return framework.iloc[0].to_dict()
 
-def get_framework_names(persona: str, report: str) -> list:
-
-    framework_ids = get_frameworks_for_report(
-        persona,
-        report
-    )
-
-    framework_df = load_framework_library()
-
-    framework_names = []
-
-    for framework_id in framework_ids:
-
-        framework = framework_df[
-            framework_df["#"].astype(str).str.strip() == framework_id
-        ]
-
-        if not framework.empty:
-
-            framework_names.append(
-                framework.iloc[0]["Framework Name"]
-            )
-
-    return framework_names
 def get_frameworks(persona: str, report: str) -> list[dict]:
     """
     Returns framework ID and Framework Name.
@@ -130,29 +106,44 @@ def get_frameworks(persona: str, report: str) -> list[dict]:
 
     return frameworks
 
-if __name__ == "__main__":
+def get_all_frameworks() -> list[dict]:
+    """
+    Returns all frameworks from the Framework Library.
+    """
 
-    print("Personas")
-    print(get_personas())
+    framework_df = load_framework_library()
 
-    print("\nReports")
-    print(get_reports("Leadership"))
+    frameworks = []
 
-    print("\nFramework IDs")
-    print(
-        get_frameworks_for_report(
-            "Leadership",
-            "Corporate Strategy & Company Health"
+    for _, row in framework_df.iterrows():
+
+        frameworks.append(
+            {
+                "id": str(row["#"]).strip(),
+                "name": row["Framework Name"]
+            }
         )
-    )
 
-    print("\nFramework Details")
-    print(get_framework_details("F37"))
+    return frameworks
 
-    print("\nFramework Names")
-    print(
-        get_framework_names(
-            "Leadership",
-            "Corporate Strategy & Company Health"
-        )
-    )
+def get_additional_frameworks(persona: str, report: str) -> list[dict]:
+    """
+    Returns frameworks that are NOT part of the recommended list.
+    """
+
+    recommended = get_frameworks(persona, report)
+
+    recommended_ids = {
+        framework["id"]
+        for framework in recommended
+    }
+
+    all_frameworks = get_all_frameworks()
+
+    additional = [
+        framework
+        for framework in all_frameworks
+        if framework["id"] not in recommended_ids
+    ]
+
+    return additional    
